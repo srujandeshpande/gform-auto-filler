@@ -13,9 +13,9 @@ import pandas as pd
 option = webdriver.ChromeOptions()
 option.add_argument("-incognito")
 #option.add_experimental_option("excludeSwitches", ['enable-automation']);
-#option.add_argument("--headless")
-#option.add_argument("disable-gpu");
-browser = webdriver.Chrome(executable_path=r'/home/srujan/chromedriver', chrome_options=option)
+option.add_argument("--headless")
+option.add_argument("disable-gpu");
+browser = webdriver.Chrome(executable_path=r'/home/srujan/chromedriver', options=option)
 
 
 def is_ascii(s):
@@ -26,7 +26,7 @@ df2 = pd.read_csv('Indian-Male-Names.csv', delimiter=',')
 females = [list(row) for row in df1.values]
 males = [list(row) for row in df2.values]
 
-for i in range(20):
+for i in range(1162,2500):
     try:
         browser.get("https://docs.google.com/forms/d/e/1FAIpQLScPT1grJW3MifAPCm9TOS1X8C8dbRrhkiStXm1WC7OYwRa_Yg/viewform")
 
@@ -53,7 +53,11 @@ for i in range(20):
                 break
 
         name = n1[0]+' '+n2[0]
-        email = name.replace(' ','').replace('@','').replace('.','').replace('/','') + '@gmail.com'
+        email = ''
+        for ch in name:
+            if ch.isalpha():
+                email += ch
+        email += '@gmail.com'
 
         text[0].send_keys(email)
         text[1].send_keys(name)
@@ -65,6 +69,6 @@ for i in range(20):
         submit.click()
         print(i)
     except:
-        pass
+        print(n1, n2, name, email)
 
 #browser.close()
